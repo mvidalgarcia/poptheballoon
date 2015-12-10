@@ -1,0 +1,20 @@
+.score {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+}
+
+.lives {
+  position: fixed;
+  right: 20px;
+  text-align: center;
+  top: 20px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+    display: inline-block;
+    }
+  }
+}
