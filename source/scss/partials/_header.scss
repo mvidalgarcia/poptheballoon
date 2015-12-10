@@ -1,0 +1,10 @@
+@mixin my-color {
+  color: red;
+}
+
+body {
+  @include my-color;
+  ul {
+    padding: 10px;
+  }
+}
