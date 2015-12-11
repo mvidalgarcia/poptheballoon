@@ -33,7 +33,7 @@ gulp.task('jshint', function() {
 gulp.task('build-css', function() {
   return gulp.src('source/scss/**/*.scss')
     .pipe(sourcemaps.init()) // Process the original sources
-    .pipe(sass())
+    .pipe(sass().on('error', sass.logError))
     .pipe(sourcemaps.write()) // Add the map to modified source.
     .pipe(gulp.dest('public/assets/css'))
     .pipe(livereload());
