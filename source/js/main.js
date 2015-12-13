@@ -1,8 +1,9 @@
 var BALLOON_PX_HEIGHT = 140,
-    N_OF_BALLOONS     = 5;
-var scoring = {'green': 5, 'blue': 10, 'orange': 15, 'red': 20};
-var lives = 3;
-var array_balloons = [];
+    N_OF_BALLOONS     = 5,
+    scoring = {'green': 5, 'blue': 10, 'orange': 15, 'red': 20},
+    lives = 3,
+    array_balloons = [],
+    finished = false;
 
 
 /* Moves balloon ascending */
@@ -67,14 +68,17 @@ function subtractLife() {
   lives = lives - 1;
   if (lives === 0) {
     $('.result').addClass("active");
+    finished = true;
   }
 }
 
 
-/* Throw event when balloon is clicked */
+/* Throws event when balloon is clicked */
 $(document).on('click', '.balloon', function() {
-  addScore($(this).data("score"));
-  resetBalloon($(this));
+  if (!finished) {
+    addScore($(this).data("score"));
+    resetBalloon($(this));
+  }
 });
 
 
@@ -101,14 +105,13 @@ $(function() {
     });
     lives = 3;
     $('.lives ul li').show();
+    finished = false;
   });
 
 
   for (var i = 0; i < N_OF_BALLOONS; i++) {
-    setTimeout(function() {
-      var $balloon = newBalloon();
-      array_balloons.push($balloon);
-      ascend($balloon);
-    }, 1000);
+    var $balloon = newBalloon();
+    array_balloons.push($balloon);
+    ascend($balloon);
   }
 });
