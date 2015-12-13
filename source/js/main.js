@@ -1,16 +1,19 @@
 var BALLOON_PX_HEIGHT = 140,
     N_OF_BALLOONS     = 5,
+    INITIAL_SPEED     = 1,        // measured in pixels per movement
+    INCREASING_SPEED_RATE = 1e5,  // the lower the faster
     scoring = {'green': 5, 'blue': 10, 'orange': 15, 'red': 20},
     lives = 3,
     array_balloons = [],
-    finished = false;
+    finished = false,
+    speed = INITIAL_SPEED;
 
 
 /* Moves balloon ascending */
 function ascend(balloon) {
   if (balloon.position().top > -BALLOON_PX_HEIGHT) {
     setTimeout(function() {
-      balloon.css({top: balloon.position().top - 1 + 'px'});
+      balloon.css({top: balloon.position().top - speed + 'px'});
       ascend(balloon);
     }, rnd(5, 20));  // balloon speed changing
   }
@@ -42,7 +45,9 @@ function newBalloon() {
 /* Adds score to the punctuation sign */
 function addScore(score) {
   var current_score = parseInt($("#points").html());
-  $("#points").html(current_score + score);
+  var updated_score = current_score + score;
+  $("#points").html(updated_score);
+  increaseBalloonSpeed(updated_score);
 }
 
 
@@ -70,6 +75,12 @@ function subtractLife() {
     $('.result').addClass("active");
     finished = true;
   }
+}
+
+
+/* Increases balloons speed */
+function increaseBalloonSpeed(score) {
+  speed = speed + (score/INCREASING_SPEED_RATE);
 }
 
 
@@ -106,6 +117,7 @@ $(function() {
     lives = 3;
     $('.lives ul li').show();
     finished = false;
+    speed = INITIAL_SPEED;
   });
 
 
@@ -114,4 +126,5 @@ $(function() {
     array_balloons.push($balloon);
     ascend($balloon);
   }
+
 });
