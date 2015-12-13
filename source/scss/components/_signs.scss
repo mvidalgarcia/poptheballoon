@@ -18,13 +18,14 @@
     }
   }
 }
+
 .result {
   display: none;
   .lose {
     display: block;
     font-size: 50pt;
     text-align: center;
-    -webkit-text-stroke: .3px $color-black;
+    //-webkit-text-stroke: .3px $color-black;
     position: relative;
     padding: 20% 0 0;
   }

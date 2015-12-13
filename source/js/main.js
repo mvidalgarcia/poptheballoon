@@ -1,16 +1,17 @@
-var BALLOON_HEIGHT = 140;
+var BALLOON_PX_HEIGHT = 140,
+    N_OF_BALLOONS     = 5;
 var scoring = {'green': 5, 'blue': 10, 'orange': 15, 'red': 20};
 var lives = 3;
-var array_balloons;
+var array_balloons = [];
 
 
 /* Moves balloon ascending */
 function ascend(balloon) {
-  if (balloon.position().top > -BALLOON_HEIGHT) {
+  if (balloon.position().top > -BALLOON_PX_HEIGHT) {
     setTimeout(function() {
-      balloon.css({top: balloon.position().top - 0.5 + 'px'});
+      balloon.css({top: balloon.position().top - 1 + 'px'});
       ascend(balloon);
-    }, 5);
+    }, rnd(5, 20));  // balloon speed changing
   }
   else {
     resetBalloon(balloon);
@@ -23,17 +24,15 @@ function ascend(balloon) {
 /* Returns a String of a random balloon color */
 function getRndColor() {
   var colors = Object.keys(scoring);
-  var idx = rnd(colors.length - 1);
+  var idx = rnd(0, colors.length - 1);
   return colors[idx];
 }
 
 
 /* Creates new element balloon in DOM */
 function newBalloon() {
-  var color = getRndColor();
-  var $balloon = $('<img class="balloon" src="assets/images/balloon-'+color+'.png">');
-  $balloon.data("score", scoring[color]);
-  $balloon.css({left: rnd(95) + '%'}); // left: (96-100%) -> balloon almost not visible
+  var $balloon = $('<img class="balloon">');
+  initBalloon($balloon);
   $balloon.appendTo($('body'));
   return $balloon;
 }
@@ -51,7 +50,7 @@ function initBalloon(balloon) {
   var color = getRndColor();
   balloon.attr('src', "assets/images/balloon-"+color+".png");
   balloon.data("score", scoring[color]);
-  balloon.css({left: rnd(95) + '%'});
+  balloon.css({left: rnd(0, 95) + '%'}); // left: (96-100%) -> balloon almost not visible
 }
 
 
@@ -64,8 +63,8 @@ function resetBalloon(balloon) {
 
 /* Subtracts life, update the lives sign and check if the player lose */
 function subtractLife() {
+  $('.lives ul li:nth-child('+lives+')').hide();  // hide heart icon
   lives = lives - 1;
-  $('.lives ul li:last-child').remove();  // remove heart icon
   if (lives === 0) {
     $('.result').addClass("active");
   }
@@ -73,24 +72,43 @@ function subtractLife() {
 
 
 /* Throw event when balloon is clicked */
-$(document).on('click', '.balloon', function(e) {
+$(document).on('click', '.balloon', function() {
   addScore($(this).data("score"));
   resetBalloon($(this));
 });
 
 
-/* Utils */
-function rnd(max) {
-  return Math.floor( Math.random()*(max + 1) );
+/***
+ * Utils
+ ***/
+
+/* Returns a random integer between min (inclusive) and max (inclusive) */
+function rnd(min, max) {
+  return Math.floor( Math.random() * (max - min + 1) ) + min;
 }
 
 
 /* On load */
 $(function() {
-  console.log('poptheballoon!');
-  for (var i = 0; i < 5; i++) {
-    var $balloon = newBalloon();
-    // array_balloons.push($balloon);
-    ascend($balloon);
+
+  /* Resets the game */
+  $("#again").on('click', function() {
+    $('.result').removeClass("active");
+    $("#points").html(0);
+    // All balloons to bottom
+    $.each( array_balloons, function( index, balloon ){
+      resetBalloon(balloon);
+    });
+    lives = 3;
+    $('.lives ul li').show();
+  });
+
+
+  for (var i = 0; i < N_OF_BALLOONS; i++) {
+    setTimeout(function() {
+      var $balloon = newBalloon();
+      array_balloons.push($balloon);
+      ascend($balloon);
+    }, 1000);
   }
 });
