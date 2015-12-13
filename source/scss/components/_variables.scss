@@ -1,6 +1,12 @@
 /* Colors */
 $color-white: #fff;
 $color-black: #000;
+$color-teal: teal;
+$color-light-teal: #168c8c;
+
+@mixin background-color-black-opacity($op) {
+  background-color: rgba(0, 0, 0, $op);
+}
 
 /* Sizes */
 $balloon-img-height: 140px;
