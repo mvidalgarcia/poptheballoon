@@ -54,7 +54,7 @@ function addScore(score) {
 /* Sets new properties to balloon  */
 function initBalloon(balloon) {
   var color = getRndColor();
-  balloon.attr('src', "assets/images/balloon-"+color+".png");
+  balloon.attr('src', "images/balloon-"+color+".png");
   balloon.data("score", scoring[color]);
   balloon.css({left: rnd(0, 95) + '%'}); // left: (96-100%) -> balloon almost not visible
 }

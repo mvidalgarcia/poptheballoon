@@ -14,7 +14,7 @@ var gulp        = require('gulp'),
 gulp.task('default', function() {
     // Start demo server
     connect.server({
-      root: 'public',
+      root: '.',
       port: 8080,
       livereload: true
     });
@@ -35,7 +35,7 @@ gulp.task('build-css', function() {
     .pipe(sourcemaps.init()) // Process the original sources
     .pipe(sass().on('error', sass.logError))
     .pipe(sourcemaps.write()) // Add the map to modified source.
-    .pipe(gulp.dest('public/assets/css'))
+    .pipe(gulp.dest('css'))
     .pipe(livereload());
 });
 
@@ -46,13 +46,13 @@ gulp.task('build-js', function() {
     //only uglify if gulp is ran with '--type production'
     .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/assets/js'))
+    .pipe(gulp.dest('js'))
     .pipe(livereload());
 });
 
 // HTML
 gulp.task('reload', function() {
-  return gulp.src('public/index.html')
+  return gulp.src('index.html')
     .pipe(connect.reload());
 });
 
@@ -60,9 +60,9 @@ gulp.task('reload', function() {
 gulp.task('watch', function() {
   gulp.watch('source/js/**/*.js', ['jshint', 'build-js']);
   gulp.watch('source/scss/**/*.scss', ['build-css']);
-  gulp.watch(['public/index.html',
-              'public/assets/css/main.css',
-              'public/assets/js/bundle.js'], ['reload']);
+  gulp.watch(['index.html',
+              'css/main.css',
+              'js/bundle.js'], ['reload']);
   // Watch Gulpconfig
   gulp.watch('Gulpfile.js', ['jshint', 'build-js', 'build-css', 'reload']);
 });
