@@ -8,9 +8,10 @@ var BALLOON_PX_HEIGHT = 140,
     lives = 3,
     array_balloons = [],
     $ufo = null,
-    finished = false,
-    ufo_running = false,
-    speed = INITIAL_SPEED;
+    finished = false,       // when gaming over, don't let poping balloons
+    ufo_running = false,    // to know when UFO should be moved
+    ufo_ascending = true,   // for senoidal path
+    speed = INITIAL_SPEED;  // balloons speed
 
 
 /* Moves balloon ascending */
@@ -109,7 +110,7 @@ function launchUfo() {
 function moveUfo(ufo) {
   if (ufo_running && ufo.position().left < $('body').width()) {
     setTimeout(function() {
-      ufo.css({left: ufo.position().left + 1 + 'px'});
+      ufo.css({left: ufo.position().left + 1 + 'px', top: senoidal(ufo.position().top) });
       moveUfo(ufo);
     }, 10);
   }
@@ -123,6 +124,25 @@ function moveUfo(ufo) {
 function resetUfo(ufo) {
   ufo.css({left: -UFO_PX_WIDTH});
   ufo_running = false;
+}
+
+
+/* Simulates senoidal UFO path */
+function senoidal(top) {
+  var window_height = $('body').height();
+  var ufo_height_percentage = top/window_height; // 0..1
+  if (ufo_ascending) {
+    if (ufo_height_percentage < 0.45) {
+      ufo_ascending = false;
+    }
+    return top - 0.75;
+  }
+  else {
+    if (ufo_height_percentage > 0.55) {
+      ufo_ascending = true;
+    }
+    return top + 0.75;
+  }
 }
 
 
@@ -172,6 +192,7 @@ $(function() {
   });
 
 
+  /* Creating balloons */
   for (var i = 0; i < N_OF_BALLOONS; i++) {
     var $balloon = newBalloon();
     array_balloons.push($balloon);
