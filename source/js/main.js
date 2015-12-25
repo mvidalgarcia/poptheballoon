@@ -53,7 +53,7 @@ function addScore(score) {
   var updated_score = current_score + score;
   $("#points").html(updated_score);
   increaseBalloonSpeed(updated_score);
-  if (updated_score > 20 && updated_score % 200 <= 15) {
+  if (updated_score > 20 && updated_score % 500 <= 15) { // launch UFO every 500 points
     launchUfo();
   }
 }
