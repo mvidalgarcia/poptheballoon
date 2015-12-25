@@ -77,7 +77,7 @@ function resetBalloon(balloon) {
 
 /* Subtracts life, update the lives sign and check if the player lose */
 function subtractLife() {
-  $('.lives ul li:nth-child('+lives+')').hide();  // hide heart icon
+  $('.lives ul li:nth-child('+lives+')').css('visibility', 'hidden');  // hide heart icon
   lives = lives - 1;
   if (lives === 0) {
     $('.result').addClass("active");
@@ -186,7 +186,7 @@ $(function() {
       resetBalloon(balloon);
     });
     lives = 3;
-    $('.lives ul li').show();
+    $('.lives ul li').css('visibility', 'visible');
     finished = false;
     speed = INITIAL_SPEED;
   });
