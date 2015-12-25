@@ -1,26 +1,30 @@
 var BALLOON_PX_HEIGHT = 140,
+    UFO_PX_WIDTH      = 121,
     N_OF_BALLOONS     = 5,
     INITIAL_SPEED     = 1,        // measured in pixels per movement
     INCREASING_SPEED_RATE = 1e5,  // the lower the faster
+    UFO_SCORE         = 100,
     scoring = {'green': 5, 'blue': 10, 'orange': 15, 'red': 20},
     lives = 3,
     array_balloons = [],
+    $ufo = null,
     finished = false,
+    ufo_running = false,
     speed = INITIAL_SPEED;
 
 
 /* Moves balloon ascending */
-function ascend(balloon) {
+function ascendBalloon(balloon) {
   if (balloon.position().top > -BALLOON_PX_HEIGHT) {
     setTimeout(function() {
       balloon.css({top: balloon.position().top - speed + 'px'});
-      ascend(balloon);
+      ascendBalloon(balloon);
     }, rnd(5, 20));  // balloon speed changing
   }
   else {
     resetBalloon(balloon);
     subtractLife();
-    ascend(balloon);
+    ascendBalloon(balloon);
   }
 }
 
@@ -48,6 +52,9 @@ function addScore(score) {
   var updated_score = current_score + score;
   $("#points").html(updated_score);
   increaseBalloonSpeed(updated_score);
+  if (updated_score > 20 && updated_score % 200 <= 15) {
+    launchUfo();
+  }
 }
 
 
@@ -84,11 +91,55 @@ function increaseBalloonSpeed(score) {
 }
 
 
+/* Creates DOM element with UFO */
+function launchUfo() {
+  // First time ufo is created
+  if ($ufo === null) {
+    $ufo = $('<img class="ufo">');
+    $ufo.appendTo($('body'));
+    $ufo.attr('src', "images/ufo.png");
+    $ufo.data("score", UFO_SCORE);
+  }
+  ufo_running = true;
+  moveUfo($ufo);
+}
+
+
+/* Moves UFO horizontally */
+function moveUfo(ufo) {
+  if (ufo_running && ufo.position().left < $('body').width()) {
+    setTimeout(function() {
+      ufo.css({left: ufo.position().left + 1 + 'px'});
+      moveUfo(ufo);
+    }, 10);
+  }
+  else {
+    resetUfo(ufo);
+  }
+}
+
+
+/* Places UFO to start position and stops it */
+function resetUfo(ufo) {
+  ufo.css({left: -UFO_PX_WIDTH});
+  ufo_running = false;
+}
+
+
 /* Throws event when balloon is clicked */
 $(document).on('click', '.balloon', function() {
   if (!finished) {
     addScore($(this).data("score"));
     resetBalloon($(this));
+  }
+});
+
+
+/* Throws event when UFO is clicked */
+$(document).on('click', '.ufo', function() {
+  if (!finished) {
+    addScore($(this).data("score"));
+    resetUfo($(this));
   }
 });
 
@@ -124,7 +175,7 @@ $(function() {
   for (var i = 0; i < N_OF_BALLOONS; i++) {
     var $balloon = newBalloon();
     array_balloons.push($balloon);
-    ascend($balloon);
+    ascendBalloon($balloon);
   }
 
 });

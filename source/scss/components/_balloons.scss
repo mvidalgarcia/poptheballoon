@@ -1,7 +1,7 @@
 .balloon {
+  background-size: contain;
   bottom: -$balloon-img-height; // Balloon image height
-  position: absolute;
   cursor: pointer;
   opacity: 0.8;
-  background-size: contain;
+  position: absolute;
 }
