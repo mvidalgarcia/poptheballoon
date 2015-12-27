@@ -14,4 +14,25 @@ body {
   overflow: hidden;
   position: relative;
   text-shadow: 0px 3px 5px $color-black;
+  @include no-selectable();
+}
+
+img {
+  // Removes the highlighting box that appear when tap holding a balloon (mobile).
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+// Mobile
+@media all and (max-width: $mobile-width) {
+  body {
+    font-size: 14pt;
+  }
+
+  .github-corner {
+    svg {
+      width: 55px;
+      height: 55px;
+    }
+  }
+
 }

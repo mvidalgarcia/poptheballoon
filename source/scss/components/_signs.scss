@@ -33,3 +33,33 @@
     display: block;
   }
 }
+
+// Mobile
+@media all and (max-width: $mobile-width) {
+  .score {
+    left: 20px;
+    top: 15px;
+  }
+
+  .lives {
+    right: 30px;
+    top: 15px;
+    ul {
+      li {
+        margin: 5px 0 0 0;
+        img {
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  .result {
+    .lose {
+      font-size: 20pt;
+      margin: 0 0 5px;
+      padding: 40% 0 0;
+    }
+  }
+
+}

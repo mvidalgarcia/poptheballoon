@@ -5,3 +5,10 @@
   position: absolute;
   top: 50%;
 }
+
+// Mobile
+@media all and (max-width: $mobile-width) {
+  .ufo {
+    width: 100px;
+  }
+}

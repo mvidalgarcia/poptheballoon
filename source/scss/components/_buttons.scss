@@ -13,3 +13,8 @@
     box-shadow: 0px 2px 3px $color-black;;
   }
 }
+
+// Removes annoying blue border when button is focused
+button:focus {
+  outline: 0;
+}
